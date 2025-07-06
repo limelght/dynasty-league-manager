@@ -1,0 +1,264 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>College Football Dynasty Manager</title>
+    <link rel="stylesheet" href="style.css">
+    <meta name="theme-color" content="#21808D">
+    <meta name="description" content="Complete college football dynasty management system">
+</head>
+<body>
+    <div id="app">
+        <!-- Header -->
+        <header class="header">
+            <div class="container">
+                <div class="header-content">
+                    <h1 class="logo">🏈 Dynasty League Manager</h1>
+                    <div class="user-info">
+                        <span id="user-name">Loading...</span>
+                        <button id="logout-btn" class="btn btn--secondary">Logout</button>
+                    </div>
+                </div>
+            </div>
+        </header>
+
+        <!-- Login Screen -->
+        <div id="login-screen" class="screen">
+            <div class="container">
+                <div class="login-card">
+                    <h2>College Football Dynasty Manager</h2>
+                    <p>Sign in to access your dynasty league</p>
+                    <div class="login-form">
+                        <input type="email" id="email-input" class="form-control" placeholder="Enter your email" required>
+                        <button id="login-btn" class="btn btn--primary btn--full-width">Sign In</button>
+                    </div>
+                    <div class="demo-accounts">
+                        <p>Demo Accounts:</p>
+                        <button class="demo-btn" data-email="cedbrobin@yahoo.com">Commissioner</button>
+                        <button class="demo-btn" data-email="POTUS214@example.com">Team Owner</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Main Dashboard -->
+        <div id="dashboard" class="screen hidden">
+            <div class="container">
+                <!-- League Status -->
+                <div class="status-card card">
+                    <div class="card__body">
+                        <div class="status-header">
+                            <div class="week-info">
+                                <h3 id="current-week">Week 1</h3>
+                                <div class="deadline-timer">
+                                    <div id="deadline-countdown" class="countdown-display">5d 12h 30m</div>
+                                    <div class="deadline-label">Until Deadline</div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="status-actions commissioner-only" id="commissioner-actions" style="display: none;">
+                            <button id="advance-week-btn" class="btn btn--primary">Advance Week</button>
+                            <button id="extend-deadline-btn" class="btn btn--secondary">Extend Deadline</button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Navigation Tabs -->
+                <div class="tabs">
+                    <button class="tab-btn active" data-tab="games">Games</button>
+                    <button class="tab-btn" data-tab="schedule">Schedule</button>
+                    <button class="tab-btn" data-tab="voting">Voting</button>
+                    <button class="tab-btn commissioner-only" data-tab="users" id="users-tab" style="display: none;">Users</button>
+                </div>
+
+                <!-- Games Tab -->
+                <div id="games-tab" class="tab-content active">
+                    <div class="games-grid" id="games-list">
+                        <!-- Game cards will be generated here -->
+                    </div>
+                </div>
+
+                <!-- Schedule Tab -->
+                <div id="schedule-tab" class="tab-content">
+                    <div class="schedule-header">
+                        <h3>My Schedule</h3>
+                        <button id="add-schedule-btn" class="btn btn--primary">Add Game</button>
+                    </div>
+                    <div class="schedule-list" id="schedule-list">
+                        <!-- Schedule items will be generated here -->
+                    </div>
+                </div>
+
+                <!-- Voting Tab -->
+                <div id="voting-tab" class="tab-content">
+                    <div class="voting-header">
+                        <h3>League Voting</h3>
+                        <button id="create-vote-btn" class="btn btn--primary commissioner-only" style="display: none;">Create Vote</button>
+                    </div>
+                    <div class="votes-list" id="votes-list">
+                        <!-- Votes will be generated here -->
+                    </div>
+                </div>
+
+                <!-- Users Tab -->
+                <div id="users-tab-content" class="tab-content">
+                    <div class="users-header">
+                        <h3>League Members</h3>
+                        <button id="add-user-btn" class="btn btn--primary commissioner-only" style="display: none;">Add Member</button>
+                    </div>
+                    <div class="users-list" id="users-list">
+                        <!-- Users will be generated here -->
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Modals -->
+        <!-- Game Status Modal -->
+        <div id="game-modal" class="modal">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h3>Update Game Status</h3>
+                    <button class="close-btn">&times;</button>
+                </div>
+                <div class="modal-body">
+                    <div class="game-info">
+                        <div class="team-matchup">
+                            <div class="team-display">
+                                <span id="modal-team1">Team 1</span>
+                                <div id="modal-team1-colors" class="team-colors"></div>
+                            </div>
+                            <span class="vs">vs</span>
+                            <div class="team-display">
+                                <span id="modal-team2">Team 2</span>
+                                <div id="modal-team2-colors" class="team-colors"></div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="game-actions">
+                        <button id="mark-played-btn" class="btn btn--primary">Mark as Played</button>
+                        <button id="mark-not-played-btn" class="btn btn--secondary">Mark as Not Played</button>
+                        <button id="toggle-score-btn" class="btn btn--outline">Enter Score</button>
+                    </div>
+                    <div class="score-input" id="score-input">
+                        <div class="form-group">
+                            <label class="form-label" for="team1-score">Team 1 Score</label>
+                            <input type="number" id="team1-score" class="form-control" placeholder="0">
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label" for="team2-score">Team 2 Score</label>
+                            <input type="number" id="team2-score" class="form-control" placeholder="0">
+                        </div>
+                        <button id="submit-score-btn" class="btn btn--primary btn--full-width">Submit Score</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Add User Modal -->
+        <div id="add-user-modal" class="modal">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h3>Add New Member</h3>
+                    <button class="close-btn">&times;</button>
+                </div>
+                <div class="modal-body">
+                    <form id="add-user-form">
+                        <div class="form-group">
+                            <label class="form-label" for="new-user-email">Email:</label>
+                            <input type="email" id="new-user-email" class="form-control" required>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label" for="new-user-name">Name:</label>
+                            <input type="text" id="new-user-name" class="form-control" required>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label" for="new-user-team">Team:</label>
+                            <select id="new-user-team" class="form-control" required>
+                                <option value="">Select a team...</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label" for="new-user-role">Role:</label>
+                            <select id="new-user-role" class="form-control" required>
+                                <option value="Team Owner">Team Owner</option>
+                                <option value="Commissioner">Commissioner</option>
+                            </select>
+                        </div>
+                        <button type="submit" class="btn btn--primary btn--full-width">Add Member</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+
+        <!-- Create Vote Modal -->
+        <div id="create-vote-modal" class="modal">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h3>Create New Vote</h3>
+                    <button class="close-btn">&times;</button>
+                </div>
+                <div class="modal-body">
+                    <form id="create-vote-form">
+                        <div class="form-group">
+                            <label class="form-label" for="vote-type">Vote Type:</label>
+                            <select id="vote-type" class="form-control" required>
+                                <option value="">Select type...</option>
+                                <option value="new_member">Add New Member</option>
+                                <option value="deadline_extension">Extend Deadline</option>
+                                <option value="rule_change">Rule Change</option>
+                                <option value="remove_member">Remove Member</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label" for="vote-title">Title:</label>
+                            <input type="text" id="vote-title" class="form-control" required>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label" for="vote-description">Description:</label>
+                            <textarea id="vote-description" class="form-control" rows="3" required></textarea>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label" for="vote-deadline">Voting Deadline:</label>
+                            <input type="datetime-local" id="vote-deadline" class="form-control" required>
+                        </div>
+                        <button type="submit" class="btn btn--primary btn--full-width">Create Vote</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+
+        <!-- Schedule Modal -->
+        <div id="schedule-modal" class="modal">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h3>Add Schedule Entry</h3>
+                    <button class="close-btn">&times;</button>
+                </div>
+                <div class="modal-body">
+                    <form id="schedule-form">
+                        <div class="form-group">
+                            <label class="form-label" for="schedule-opponent">Opponent:</label>
+                            <select id="schedule-opponent" class="form-control" required>
+                                <option value="">Select opponent...</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label" for="schedule-date">Game Date:</label>
+                            <input type="datetime-local" id="schedule-date" class="form-control" required>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label" for="schedule-notes">Notes:</label>
+                            <textarea id="schedule-notes" class="form-control" rows="2"></textarea>
+                        </div>
+                        <button type="submit" class="btn btn--primary btn--full-width">Add to Schedule</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="app.js"></script>
+</body>
+</html>
